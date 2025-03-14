@@ -1,0 +1,7 @@
+flask
+requests
+pillow
+tensorflow\nkeras
+flask
+tensorflow
+sqlite3

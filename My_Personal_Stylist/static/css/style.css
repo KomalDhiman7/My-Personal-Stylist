@@ -1,0 +1,110 @@
+/* General Body Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+.flash-messages {
+    background-color: #eaffea;
+    color: #4CAF50;
+    padding: 10px;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Header Styling */
+h1 {
+    font-weight: 600;
+    color: #222;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Containers */
+form {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 25px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
+}
+
+form:hover {
+    transform: translateY(-5px);
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 8px;
+    background: #f0f2f5;
+    outline: none;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Design */
+button {
+    background: #5a67d8;  /* Soft Indigo */
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 100%;
+    margin-top: 12px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #4c51bf;  /* Darker Indigo */
+}
+
+/* Displaying Results */
+h3 {
+    color: #5a67d8;
+    font-weight: bold;
+    text-align: center;
+}
+
+img {
+    border: 2px solid #5a67d8;
+    border-radius: 15px;
+    margin-top: 15px;
+    width: 100%;
+    max-width: 300px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2rem;
+    }
+    form {
+        width: 90%;
+    }
+    img {
+        width: 90%;
+    }
+}
