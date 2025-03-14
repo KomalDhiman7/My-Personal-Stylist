@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Wardrobe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>{{ username }}'s Wardrobe 👗👕</h1>
+
+    <form method="POST" action="/add_item" enctype="multipart/form-data">
+        <input type="text" name="item_name" placeholder="Item Name" required>
+        <input type="file" name="image" required>
+        <button type="submit">Add Item</button>
+    </form>
+
+    <h3>Your Saved Outfits:</h3>
+    <div class="wardrobe-gallery">
+        {% for item in wardrobe_items %}
+            <div class="wardrobe-item">
+                <img src="{{ item.image_path }}" alt="{{ item.name }}">
+                <p>{{ item.name }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Personal Stylist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .flash-messages {
+        background-color: #eaffea;
+        color: #4CAF50;
+        padding: 10px;
+        border: 2px solid #4CAF50;
+        border-radius: 8px;
+        text-align: center;
+        margin-bottom: 15px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        form {
+            background: #ffffff;
+            border: 2px solid #4CAF50;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 15px 0;
+        }
+
+        label {
+            display: block;
+            margin: 8px 0 4px;
+            font-weight: bold;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #4CAF50;
+            border-radius: 8px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result-box {
+            background-color: #e8f5e9;
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        img {
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 2px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <h1>Welcome to My Personal Stylist!</h1>
+    
+    <p>New here? <a href="{{ url_for('signup') }}">Create an account</a></p>
+
+
+    <!-- Weather Form -->
+    <form method="POST">
+        <label for="city">Enter City:</label>
+        <input type="text" id="city" name="city" required>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <!-- Weather Info Display -->
+    {% if weather_info %}
+    <div class="result-box">
+        <h3>{{ weather_info }}</h3>
+        <p><strong>Outfit Suggestion:</strong> {{ outfit_suggestion }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Image Upload Form -->
+    <form method="POST" enctype="multipart/form-data">
+        <label for="image">Upload Your Outfit:</label>
+        <input type="file" id="image" name="image" accept="image/*">
+        <button type="submit">Analyze Outfit</button>
+    </form>
+
+    <!-- Uploaded Image Display -->
+    {% if uploaded_image %}
+    <div class="result-box">
+        <h3>Your Uploaded Image:</h3>
+        <img src="{{ uploaded_image }}" alt="Uploaded Image" width="300">
+    </div>
+    {% endif %}
+</body>
+</html>
