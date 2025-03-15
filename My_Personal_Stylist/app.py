@@ -3,12 +3,39 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from auth import auth
 from weather_api import get_weather
 from image_analysis import analyze_outfit
+from wardrobe import add_item, get_wardrobe
 from PIL import Image
 
+# Initialize Flask App
 app = Flask(__name__)
-app.register_blueprint(auth)
-app.secret_key = 'your_secret_key_here'  
+app.secret_key = 'your_secret_key_here'
 app.config['UPLOAD_FOLDER'] = 'static/images/uploads'
+
+# Register Blueprints
+app.register_blueprint(auth, url_prefix='/auth')  
+
+# ---------------------- ADD ITEM ROUTE ----------------------
+@app.route('/add_item', methods=['GET', 'POST'])
+def add_item_page():
+    if request.method == 'POST':
+        category = request.form['category']
+        color = request.form['color']
+        image = request.files['image']
+
+        if image:
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+            image.save(image_path)
+            add_item(user_id=1, category=category, color=color, image_path=image_path)
+        
+        return redirect(url_for('auth.wardrobe'))
+
+    return render_template('add_item.html')
+
+# ---------------------- WARDROBE ROUTE ----------------------
+@app.route('/wardrobe')
+def wardrobe():
+    items = get_wardrobe(user_id=1)
+    return render_template('wardrobe.html', items=items)
 
 # ---------------------- OUTFIT SUGGESTION FUNCTION ----------------------
 def suggest_outfit(temp, description):
@@ -64,9 +91,8 @@ def signup():
         print(f"New User Registered: {username}")
 
         flash("Account created successfully!", "success")
-        return redirect(url_for('home'))
+        return redirect(url_for('auth.wardrobe'))
 
-    
     return render_template('signup.html')
 
 if __name__ == '__main__':

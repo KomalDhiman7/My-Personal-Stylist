@@ -25,6 +25,8 @@ create_user_table()
 
 # Signup route
 @auth.route('/signup', methods=['GET', 'POST'])
+# Signup route
+@auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -39,16 +41,17 @@ def signup():
 
             if user:
                 session['username'] = username
-                return redirect(url_for('wardrobe'))
+                return redirect(url_for('auth.wardrobe'))  # Fixed here ✅
 
             # Add new user
             cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
             conn.commit()
 
             session['username'] = username
-            return redirect(url_for('wardrobe'))
+            return redirect(url_for('auth.wardrobe'))  # Fixed here ✅
 
     return render_template('signup.html')
+
 
 # Wardrobe route
 @auth.route('/wardrobe', methods=['GET'])
