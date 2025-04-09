@@ -1,19 +1,22 @@
-from tensorflow import keras
 from PIL import Image
 import numpy as np
 
-# Dummy model for now (We can improve this later)
 def analyze_outfit(image_path):
-    # Load the image
-    img = Image.open(image_path).resize((224, 224))
-    img_array = np.array(img) / 255.0  # Normalize pixel values
-    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    img = Image.open(image_path).resize((224, 224)).convert('RGB')
+    img_array = np.array(img)
 
-    # Example logic for outfit suggestions
-    dominant_color = img.convert('RGB').getpixel((0, 0))
-    if dominant_color[0] > dominant_color[1] and dominant_color[0] > dominant_color[2]:
-        return "Red tones detected! Try pairing it with neutral accessories."
-    elif dominant_color[1] > dominant_color[0] and dominant_color[1] > dominant_color[2]:
-        return "Green tones detected! Earthy tones will complement this."
+    # Calculate average RGB color
+    avg_color = img_array.mean(axis=(0, 1))
+    r, g, b = avg_color.astype(int)
+
+    # Logic based on average color
+    if r > g and r > b:
+        return "This outfit has dominant red tones. Try pairing with beige or black accessories."
+    elif g > r and g > b:
+        return "Green outfit vibes! Earthy or neutral tones will complement well."
+    elif b > r and b > g:
+        return "Blue tones detected. Consider pairing with whites or greys."
+    elif r < 80 and g < 80 and b < 80:
+        return "Dark outfit spotted. Add contrast with lighter accessories or bright shoes."
     else:
-        return "Dark tones detected! Add some bright accessories for contrast."
+        return "Neutral tones — feel free to style boldly with statement pieces!"

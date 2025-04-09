@@ -3,13 +3,15 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from auth import auth
 from weather_api import get_weather
 from image_analysis import analyze_outfit
-from wardrobe import add_item, get_wardrobe
+
 from PIL import Image
 
 # Initialize Flask App
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 app.config['UPLOAD_FOLDER'] = 'static/images/uploads'
+
+
 
 # Register Blueprints
 app.register_blueprint(auth, url_prefix='/auth')  
@@ -31,11 +33,6 @@ def add_item_page():
 
     return render_template('add_item.html')
 
-# ---------------------- WARDROBE ROUTE ----------------------
-@app.route('/wardrobe')
-def wardrobe():
-    items = get_wardrobe(user_id=1)
-    return render_template('wardrobe.html', items=items)
 
 # ---------------------- OUTFIT SUGGESTION FUNCTION ----------------------
 def suggest_outfit(temp, description):
@@ -69,11 +66,16 @@ def home():
             image = request.files['image']
             if image.filename != '':
                 image_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+                print("Saving image to:", image_path)
+                
                 image.save(image_path)
                 uploaded_image = image_path
 
                 # Outfit suggestion based on image analysis
                 outfit_suggestion = analyze_outfit(image_path)
+                
+                print("Running outfit analysis on:", image_path)
+                print("Suggestion:", outfit_suggestion)
 
     return render_template('index.html', 
                            weather_info=weather_info, 

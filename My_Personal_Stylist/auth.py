@@ -52,6 +52,31 @@ def signup():
 
     return render_template('signup.html')
 
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+            user = cursor.fetchone()
+
+            if user:
+                session['username'] = username
+                return redirect(url_for('auth.wardrobe'))
+            else:
+                return "Invalid credentials. Please try again."
+
+    return render_template('login.html')
+
+@auth.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
+
 
 # Wardrobe route
 @auth.route('/wardrobe', methods=['GET'])

@@ -107,7 +107,12 @@
 
     <h1>Welcome to My Personal Stylist!</h1>
     
+    {% if not session.get('username') %}
     <p>New here? <a href="{{ url_for('signup') }}">Create an account</a></p>
+{% else %}
+    <p>Welcome, {{ session.username }}! <a href="{{ url_for('auth.logout') }}">Logout</a></p>
+{% endif %}
+
 
 
     <!-- Weather Form -->
@@ -118,12 +123,20 @@
     </form>
 
     <!-- Weather Info Display -->
-    {% if weather_info %}
-    <div class="result-box">
-        <h3>{{ weather_info }}</h3>
-        <p><strong>Outfit Suggestion:</strong> {{ outfit_suggestion }}</p>
-    </div>
-    {% endif %}
+    <!-- Weather Info Display -->
+{% if weather_info %}
+<div class="result-box">
+    <h3>{{ weather_info }}</h3>
+</div>
+{% endif %}
+
+<!-- AI Outfit Suggestion -->
+{% if outfit_suggestion %}
+<div class="result-box">
+    <h3>AI Suggestion:</h3>
+    <p><strong>{{ outfit_suggestion }}</strong></p>
+</div>
+{% endif %}
 
     <!-- Image Upload Form -->
     <form method="POST" enctype="multipart/form-data">
