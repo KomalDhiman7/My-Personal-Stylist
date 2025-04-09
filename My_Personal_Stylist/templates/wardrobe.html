@@ -1,100 +1,125 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Wardrobe</title>
+    <title>💅 My Glam Wardrobe 💄</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #fceff9, #f3f0ff);
+            color: #2e2e2e;
             text-align: center;
             padding: 30px;
         }
 
         h1 {
-            color: #4CAF50;
+            color: #d63384;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            color: #6f42c1;
+            margin-top: 40px;
+            font-weight: 600;
         }
 
         form {
-            background-color: #ffffff;
-            border: 2px solid #4CAF50;
-            border-radius: 12px;
-            padding: 20px;
+            background-color: #fff0f6;
+            border: 2px solid #d63384;
+            border-radius: 15px;
+            padding: 25px;
             width: 90%;
             max-width: 400px;
             margin: 20px auto;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         input[type="text"], input[type="file"] {
             width: 100%;
             padding: 10px;
-            margin-top: 10px;
-            border: 1px solid #4CAF50;
-            border-radius: 8px;
+            margin-top: 12px;
+            border: 1.5px solid #d63384;
+            border-radius: 10px;
         }
 
         button {
             width: 100%;
-            margin-top: 15px;
-            padding: 10px;
+            margin-top: 18px;
+            padding: 12px;
             border: none;
-            border-radius: 8px;
-            background-color: #4CAF50;
+            border-radius: 10px;
+            background-color: #d63384;
             color: white;
             font-weight: bold;
+            font-size: 1em;
             cursor: pointer;
+            transition: 0.3s ease-in-out;
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #c2185b;
+            letter-spacing: 1px;
         }
 
         .wardrobe-gallery {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             margin-top: 30px;
         }
 
         .wardrobe-item {
             background-color: #ffffff;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 10px;
-            width: 180px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease-in-out;
+            border: 1.5px dashed #d63384;
+            border-radius: 14px;
+            padding: 15px;
+            width: 200px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out;
         }
 
         .wardrobe-item:hover {
-            transform: scale(1.05);
+            transform: scale(1.06);
         }
 
         .wardrobe-item img {
             max-width: 100%;
             height: auto;
-            border-radius: 8px;
+            border-radius: 12px;
+            border: 2px solid #f8d7e4;
         }
 
         .wardrobe-item p {
-            margin-top: 8px;
+            margin-top: 10px;
             font-weight: bold;
+            color: #d63384;
         }
     </style>
 </head>
 <body>
-    <h1>{{ username }}'s Wardrobe 👗👕</h1>
+    <h1>✨ {{ username }}'s Glam Wardrobe ✨</h1>
 
-    <form method="POST" action="/add_item" enctype="multipart/form-data">
-        <input type="text" name="item_name" placeholder="Item Name" required>
-        <input type="file" name="image" required>
-        <button type="submit">Add Item</button>
-    </form>
+    <!-- 🔥 Add Item Form -->
+<form method="POST" action="/add_item" enctype="multipart/form-data">
+    <input type="text" name="item_name" placeholder="Name this fierce look 💁‍♀️" required>
+    <input type="file" name="image" required>
+    <button type="submit">Add to Closet 🛍️</button>
+</form>
 
-    <h3>Your Saved Outfits:</h3>
+<!-- 🔍 Filter Form -->
+<form method="GET" action="/auth/wardrobe" style="margin-top: 20px;">
+    <select name="filter_type">
+        <option value="">Filter by...</option>
+        <option value="category">Category</option>
+        <option value="color">Color</option>
+    </select>
+    <input type="text" name="filter_value" placeholder="Slay with a search 💅">
+    <button type="submit">Apply Filter 🔍</button>
+</form>
+
+    <h3>Your Saved Outfits 🔥</h3>
     <div class="wardrobe-gallery">
         {% for item in wardrobe_items %}
             <div class="wardrobe-item">
@@ -103,5 +128,20 @@
             </div>
         {% endfor %}
     </div>
+    <div class="wardrobe-item">
+        <img src="{{ item[4] }}" alt="{{ item[2] }}">
+        <p>{{ item[2] }}</p>
+    
+        <!-- 🗑️ Delete button -->
+        <form action="/auth/delete_item/{{ item[0] }}" method="POST" style="margin-top: 10px;">
+            <button type="submit" style="background-color: #ff4d4d;">Delete ❌</button>
+        </form>
+    
+        <!-- ✏️ Edit button -->
+        <a href="/auth/edit_item/{{ item[0] }}">
+            <button style="background-color: #ffa500; margin-top: 5px;">Edit ✨</button>
+        </a>
+    </div>
+    
 </body>
 </html>

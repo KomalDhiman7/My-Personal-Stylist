@@ -25,8 +25,6 @@ create_user_table()
 
 # Signup route
 @auth.route('/signup', methods=['GET', 'POST'])
-# Signup route
-@auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -57,6 +55,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        remember = request.form.get('remember')
 
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
@@ -65,16 +64,21 @@ def login():
 
             if user:
                 session['username'] = username
+                if remember:
+                    session.permanent = True  # Makes session last longer
                 return redirect(url_for('auth.wardrobe'))
             else:
                 return "Invalid credentials. Please try again."
 
-    return render_template('login.html')
+    return render_template('login.html', error="Invalid credentials. Please try again.")
+
+
 
 @auth.route('/logout')
 def logout():
     session.pop('username', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('auth.login'))
+
 
 
 
@@ -85,9 +89,16 @@ def wardrobe():
     if not username:
         return redirect(url_for('auth.signup'))
 
+    filter_type = request.args.get('filter_type')
+    filter_value = request.args.get('filter_value')
+
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM wardrobe WHERE username=?", (username,))
+        if filter_type and filter_value:
+            query = f"SELECT * FROM wardrobe WHERE username=? AND {filter_type} LIKE ?"
+            cursor.execute(query, (username, f"%{filter_value}%"))
+        else:
+            cursor.execute("SELECT * FROM wardrobe WHERE username=?", (username,))
         wardrobe_items = cursor.fetchall()
 
     return render_template('wardrobe.html', username=username, wardrobe_items=wardrobe_items)

@@ -1,86 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Signup - My Personal Stylist</title>
+    <title>Login - My Personal Stylist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
+            background: linear-gradient(135deg, #ff99cc, #cc66ff);
+            font-family: 'Poppins', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f0f4f8;
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            padding: 40px;
+            color: #fff;
         }
 
-        h1 {
-            color: #4CAF50;
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 1px 1px 3px #00000060;
         }
 
         form {
-            background: #ffffff;
-            border: 2px solid #4CAF50;
-            border-radius: 12px;
-            padding: 20px;
+            background: #fff;
+            color: #333;
+            padding: 25px;
+            border-radius: 16px;
             width: 100%;
             max-width: 350px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            border: none;
         }
 
-        label {
-            display: block;
-            margin: 8px 0 4px;
-            font-weight: bold;
-        }
-
-        input {
+        input[type="text"],
+        input[type="password"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #4CAF50;
-            border-radius: 8px;
-            outline: none;
-            box-sizing: border-box;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #cc66ff;
+            border-radius: 10px;
+            font-size: 14px;
         }
 
         button {
             width: 100%;
-            background-color: #4CAF50;
-            color: #fff;
+            padding: 12px;
+            background: #cc66ff;
             border: none;
-            border-radius: 8px;
-            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: white;
+            font-size: 16px;
+            margin-top: 15px;
             cursor: pointer;
-            margin-top: 10px;
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            background-color: #45a049;
+            background: #b04ae0;
+            transform: scale(1.03);
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
         }
 
         a {
-            color: #4CAF50;
+            color: #cc66ff;
             text-decoration: none;
-            display: block;
-            margin-top: 10px;
-            text-align: center;
+            font-weight: bold;
         }
 
         a:hover {
             text-decoration: underline;
         }
+
+        .checkbox {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox input {
+            margin-right: 10px;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
-    <h1>Create an Account</h1>
-    
+    <h2>Welcome Back, Queen 💋</h2>
     <form method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        <label>Username:</label>
+        <input type="text" name="username" required>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        <label>Password:</label>
+        <input type="password" name="password" required>
 
-        <button type="submit">Sign Up</button>
-        <a href="/">Back to Home</a>
+        <div class="checkbox">
+            <input type="checkbox" name="remember"> <span>Remember Me</span>
+        </div>
+
+        <button type="submit">Slay Login 💅</button>
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <p>Not a glam girl yet? <a href="/signup">Join the Squad</a></p>
     </form>
 </body>
 </html>

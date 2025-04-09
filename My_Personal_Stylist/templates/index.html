@@ -2,96 +2,83 @@
 <html>
 <head>
     <title>My Personal Stylist</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
     <style>
-        .flash-messages {
-        background-color: #eaffea;
-        color: #4CAF50;
-        padding: 10px;
-        border: 2px solid #4CAF50;
-        border-radius: 8px;
-        text-align: center;
-        margin-bottom: 15px;
-        }
-
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffe4f5, #fceaff);
+    color: #333;
+    text-align: center;
+    padding: 30px;
+}
 
-        h1 {
-            color: #4CAF50;
-            margin-bottom: 10px;
-        }
+h1, h3 {
+    color: #ff4bb5;
+    text-shadow: 1px 1px #ffe8f8;
+    font-weight: 800;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
 
-        a {
-            color: #4CAF50;
-            text-decoration: none;
-            font-weight: bold;
-        }
+a {
+    color: #ff1493;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+a:hover {
+    color: #c2185b;
+    text-decoration: underline;
+}
 
-        a:hover {
-            text-decoration: underline;
-        }
+form {
+    background: white;
+    border: 2px dashed #ff69b4;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(255, 105, 180, 0.3);
+}
 
-        form {
-            background: #ffffff;
-            border: 2px solid #4CAF50;
-            border-radius: 12px;
-            padding: 20px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin: 15px 0;
-        }
+input, button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ff69b4;
+    margin: 8px 0;
+    box-shadow: 0 0 5px rgba(255, 20, 147, 0.2);
+}
 
-        label {
-            display: block;
-            margin: 8px 0 4px;
-            font-weight: bold;
-        }
+button {
+    background: #ff69b4;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+button:hover {
+    background: #ff1493;
+    transform: scale(1.05);
+}
 
-        input, button {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #4CAF50;
-            border-radius: 8px;
-            outline: none;
-            box-sizing: border-box;
-        }
+.result-box {
+    background: #fff0f5;
+    border: 2px solid #ff69b4;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+    box-shadow: 0 0 12px rgba(255, 105, 180, 0.2);
+}
 
-        button {
-            background-color: #4CAF50;
-            color: #fff;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+img {
+    max-width: 300px;
+    border-radius: 10px;
+    border: 3px solid #ff1493;
+    margin-top: 10px;
+}
 
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .result-box {
-            background-color: #e8f5e9;
-            border: 2px solid #4CAF50;
-            padding: 15px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 400px;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        img {
-            margin-top: 10px;
-            border-radius: 8px;
-            border: 2px solid #4CAF50;
-        }
     </style>
 </head>
 <body>
@@ -108,7 +95,8 @@
     <h1>Welcome to My Personal Stylist!</h1>
     
     {% if not session.get('username') %}
-    <p>New here? <a href="{{ url_for('signup') }}">Create an account</a></p>
+    <a href="{{ url_for('auth.login') }}">Create an account</a>
+
 {% else %}
     <p>Welcome, {{ session.username }}! <a href="{{ url_for('auth.logout') }}">Logout</a></p>
 {% endif %}
@@ -130,13 +118,23 @@
 </div>
 {% endif %}
 
-<!-- AI Outfit Suggestion -->
+{% if today_outfit %}
+<div class="result-box" style="background: linear-gradient(135deg, #fff7f7, #e0f7fa); box-shadow: 0 6px 12px rgba(0,0,0,0.1);">
+    <h3 style="color: #FF4081; font-size: 22px;">🌟 Today’s Outfit Pick</h3>
+    <img src="{{ today_outfit[1] }}" alt="{{ today_outfit[0] }}" width="300" style="border: 3px solid #FF4081;">
+    <p style="font-size: 18px; color: #333; margin-top: 10px;"><strong>{{ today_outfit[0] }}</strong></p>
+</div>
+{% endif %}
+
+
 {% if outfit_suggestion %}
 <div class="result-box">
     <h3>AI Suggestion:</h3>
     <p><strong>{{ outfit_suggestion }}</strong></p>
 </div>
 {% endif %}
+
+
 
     <!-- Image Upload Form -->
     <form method="POST" enctype="multipart/form-data">
