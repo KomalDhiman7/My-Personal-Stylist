@@ -29,7 +29,7 @@ def add_item_page():
             image.save(image_path)
             add_item(user_id=1, category=category, color=color, image_path=image_path)
         
-        return redirect(url_for('auth.wardrobe'))
+        return redirect('/')
 
     return render_template('add_item.html')
 
