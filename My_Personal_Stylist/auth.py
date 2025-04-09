@@ -57,7 +57,7 @@ def login():
         password = request.form['password']
         remember = request.form.get('remember')
 
-        with sqlite3.connect(DB_PATH) as conn:
+        with sqlite3.connect("database.db") as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
             user = cursor.fetchone()
@@ -65,12 +65,13 @@ def login():
             if user:
                 session['username'] = username
                 if remember:
-                    session.permanent = True  # Makes session last longer
+                    session.permanent = True
                 return redirect(url_for('auth.wardrobe'))
             else:
-                return "Invalid credentials. Please try again."
+                return render_template('login.html', error="Invalid credentials. Please try again.")
 
-    return render_template('login.html', error="Invalid credentials. Please try again.")
+    # Only show error if it was a POST and credentials were wrong
+    return render_template('login.html')  # <-- no error for GET request
 
 
 

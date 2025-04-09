@@ -102,46 +102,40 @@
     <h1>✨ {{ username }}'s Glam Wardrobe ✨</h1>
 
     <!-- 🔥 Add Item Form -->
-<form method="POST" action="/add_item" enctype="multipart/form-data">
-    <input type="text" name="item_name" placeholder="Name this fierce look 💁‍♀️" required>
-    <input type="file" name="image" required>
-    <button type="submit">Add to Closet 🛍️</button>
-</form>
+    <form method="POST" action="/add_item" enctype="multipart/form-data">
+        <input type="text" name="item_name" placeholder="Name this fierce look 💁‍♀️" required>
+        <input type="file" name="image" required>
+        <button type="submit">Add to Closet 🛍️</button>
+    </form>
 
-<!-- 🔍 Filter Form -->
-<form method="GET" action="/auth/wardrobe" style="margin-top: 20px;">
-    <select name="filter_type">
-        <option value="">Filter by...</option>
-        <option value="category">Category</option>
-        <option value="color">Color</option>
-    </select>
-    <input type="text" name="filter_value" placeholder="Slay with a search 💅">
-    <button type="submit">Apply Filter 🔍</button>
-</form>
+    <!-- 🔍 Filter Form -->
+    <form method="GET" action="/auth/wardrobe" style="margin-top: 20px;">
+        <select name="filter_type">
+            <option value="">Filter by...</option>
+            <option value="category">Category</option>
+            <option value="color">Color</option>
+        </select>
+        <input type="text" name="filter_value" placeholder="Slay with a search 💅">
+        <button type="submit">Apply Filter 🔍</button>
+    </form>
 
     <h3>Your Saved Outfits 🔥</h3>
     <div class="wardrobe-gallery">
         {% for item in wardrobe_items %}
-            <div class="wardrobe-item">
-                <img src="{{ item[4] }}" alt="{{ item[2] }}">
-                <p>{{ item[2] }}</p>
-            </div>
+        <div class="wardrobe-item">
+            <img src="{{ item[4] }}" alt="{{ item[2] }}">
+            <p>{{ item[2] }}</p>
+            <!-- ✏️ Edit button -->
+            <a href="/auth/edit_item/{{ item[0] }}">
+                <button style="background-color: #ffa500; margin-top: 5px;">Edit ✨</button>
+            </a>
+
+            <!-- ❌ Delete button -->
+            <form action="/auth/delete_item/{{ item[0] }}" method="POST" style="margin-top: 10px;">
+                <button type="submit" style="background-color: #ff4d4d;">Delete ❌</button>
+            </form>
+        </div>
         {% endfor %}
     </div>
-    <div class="wardrobe-item">
-        <img src="{{ item[4] }}" alt="{{ item[2] }}">
-        <p>{{ item[2] }}</p>
-    
-        <!-- 🗑️ Delete button -->
-        <form action="/auth/delete_item/{{ item[0] }}" method="POST" style="margin-top: 10px;">
-            <button type="submit" style="background-color: #ff4d4d;">Delete ❌</button>
-        </form>
-    
-        <!-- ✏️ Edit button -->
-        <a href="/auth/edit_item/{{ item[0] }}">
-            <button style="background-color: #ffa500; margin-top: 5px;">Edit ✨</button>
-        </a>
-    </div>
-    
 </body>
 </html>
