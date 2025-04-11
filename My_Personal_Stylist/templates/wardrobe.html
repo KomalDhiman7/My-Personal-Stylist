@@ -3,6 +3,7 @@
 <head>
     <title>💅 My Glam Wardrobe 💄</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -10,7 +11,31 @@
             color: #2e2e2e;
             text-align: center;
             padding: 30px;
+            display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
         }
+        form,
+.result-box,
+.wardrobe-item {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+}
+.wardrobe-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  object-fit: cover;
+}
+
 
         h1 {
             color: #d63384;
@@ -122,6 +147,27 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+@media (max-width: 768px) {
+  h1, h2, h3 {
+    font-size: 22px;
+  }
+
+  input, button, select {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .wardrobe-item {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  form {
+    padding: 15px;
+  }
+}
+
 
     </style>
 </head>

@@ -9,12 +9,15 @@ from PIL import Image
 from datetime import timedelta
 
 
+
+
 # ---------------------- Flask Config ----------------------
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 app.config['UPLOAD_FOLDER'] = 'static/images/uploads'
 app.permanent_session_lifetime = timedelta(days=30)
+
 
 
 # Register Blueprints

@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Login - My Personal Stylist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -12,7 +13,31 @@
             align-items: center;
             padding: 40px;
             color: #fff;
+            display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
         }
+        form,
+.result-box,
+.wardrobe-item {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+}
+.wardrobe-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  object-fit: cover;
+}
+
 
         h2 {
             font-size: 28px;
@@ -93,6 +118,26 @@
             margin-top: 15px;
             font-size: 14px;
         }
+        @media (max-width: 768px) {
+  h1, h2, h3 {
+    font-size: 22px;
+  }
+
+  input, button, select {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .wardrobe-item {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  form {
+    padding: 15px;
+  }
+}
+
     </style>
 </head>
 <body>
@@ -114,7 +159,8 @@
         <p class="error">{{ error }}</p>
         {% endif %}
 
-        <p>Not a glam girl yet? <a href="/auth/signup">Join the Squad</a></p>
+        <p>Not a glam girl yet? <a href="{{ url_for('auth.signup') }}">Join the Squad</a></p>
+
 
     </form>
 </body>

@@ -2,14 +2,41 @@
 <html>
 <head>
     <title>My Personal Stylist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <style>
         body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #ffe4f5, #fceaff);
+    background:"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Ffree-photos-vectors%2Fkiss-wallpaper&psig=AOvVaw3aPGj_7--S3715A5hDVg6f&ust=1744481338938000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjZ2snJ0IwDFQAAAAAdAAAAABAE";
+    
     color: #333;
     text-align: center;
     padding: 30px;
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+form,
+.result-box,
+.wardrobe-item {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+}
+
+.wardrobe-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  object-fit: cover;
 }
 
 h1, h3 {
@@ -105,6 +132,27 @@ img {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+@media (max-width: 768px) {
+  h1, h2, h3 {
+    font-size: 22px;
+  }
+
+  input, button, select {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .wardrobe-item {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  form {
+    padding: 15px;
+  }
+}
+
 
 
     </style>
