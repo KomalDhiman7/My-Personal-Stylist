@@ -79,9 +79,42 @@ img {
     margin-top: 10px;
 }
 
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  display: none;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 8px solid #ff69b4;
+  border-top: 8px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
     </style>
 </head>
 <body>
+
+    <div id="spinner" class="spinner-overlay">
+        <div class="spinner"></div>
+      </div>
+      
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         <div class="flash-messages">
@@ -131,6 +164,10 @@ img {
 {% if outfit_suggestion %}
 <div class="result-box">
     <h3>AI Suggestion:</h3>
+    {% if uploaded_image %}
+<p>✨ Your outfit has been slay-analyzed ✨</p>
+{% endif %}
+
     <p><strong>{{ outfit_suggestion }}</strong></p>
 </div>
 {% endif %}
@@ -151,5 +188,16 @@ img {
         <img src="{{ uploaded_image }}" alt="Uploaded Image" width="300">
     </div>
     {% endif %}
+    <script>
+        const forms = document.querySelectorAll("form");
+        const spinner = document.getElementById("spinner");
+      
+        forms.forEach(form => {
+          form.addEventListener("submit", () => {
+            spinner.style.display = "flex";
+          });
+        });
+      </script>
+      
 </body>
 </html>

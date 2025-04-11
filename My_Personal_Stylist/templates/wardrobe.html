@@ -96,9 +96,41 @@
             font-weight: bold;
             color: #d63384;
         }
+        .spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  display: none;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 8px solid #ff69b4;
+  border-top: 8px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
     </style>
 </head>
 <body>
+
+    <div id="spinner" class="spinner-overlay">
+        <div class="spinner"></div>
+      </div>
+      
     <h1>✨ {{ username }}'s Glam Wardrobe ✨</h1>
 
     <!-- 🔥 Add Item Form -->
@@ -123,8 +155,9 @@
     <div class="wardrobe-gallery">
         {% for item in wardrobe_items %}
         <div class="wardrobe-item">
-            <img src="{{ item[4] }}" alt="{{ item[2] }}">
-            <p>{{ item[2] }}</p>
+            <img src="{{ item['image_path'] }}">
+            <p>{{ item['item_name'] }}</p>
+
             <!-- ✏️ Edit button -->
             <a href="/auth/edit_item/{{ item[0] }}">
                 <button style="background-color: #ffa500; margin-top: 5px;">Edit ✨</button>
@@ -132,10 +165,36 @@
 
             <!-- ❌ Delete button -->
             <form action="/auth/delete_item/{{ item[0] }}" method="POST" style="margin-top: 10px;">
+                <img id="preview" src="#" style="display:none; margin-top:10px;" width="150" />
+
                 <button type="submit" style="background-color: #ff4d4d;">Delete ❌</button>
             </form>
         </div>
         {% endfor %}
     </div>
+    <script>
+        document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+            const [file] = e.target.files;
+            if (file) {
+                const preview = document.getElementById('preview');
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            }
+        });
+
+        
+  const forms = document.querySelectorAll("form");
+  const spinner = document.getElementById("spinner");
+
+  forms.forEach(form => {
+    form.addEventListener("submit", () => {
+      spinner.style.display = "flex";
+    });
+  });
+
+
+        </script>
+        
 </body>
+
 </html>

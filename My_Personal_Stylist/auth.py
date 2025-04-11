@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
+from werkzeug.security import generate_password_hash, check_password_hash
+
 import sqlite3
 
 auth = Blueprint('auth', __name__)
@@ -26,52 +28,57 @@ create_user_table()
 # Signup route
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if session.get('username'):
+        return redirect(url_for('auth.wardrobe'))
+
     if request.method == 'POST':
         username = request.form['username']
-        password = request.form['password']
+        password = generate_password_hash(request.form['password'])
 
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
-
-            # Check if user exists
             cursor.execute("SELECT * FROM users WHERE username=?", (username,))
             user = cursor.fetchone()
 
             if user:
-                session['username'] = username
-                return redirect(url_for('auth.wardrobe'))  # Fixed here ✅
+                return render_template('signup.html', error="Username already exists")
 
-            # Add new user
             cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
             conn.commit()
 
-            session['username'] = username
-            return redirect(url_for('auth.wardrobe'))  # Fixed here ✅
+        session['username'] = username
+        return redirect(url_for('auth.wardrobe'))
 
     return render_template('signup.html')
 
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    if session.get('username'):
+        return redirect(url_for('auth.wardrobe'))
+
+    error = None
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         remember = request.form.get('remember')
 
-        with sqlite3.connect("database.db") as conn:
+        with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+            cursor.execute("SELECT * FROM users WHERE username=?", (username,))
             user = cursor.fetchone()
 
-            if user:
+            if user and check_password_hash(user[2], password):  # user[2] = hashed password
                 session['username'] = username
                 if remember:
                     session.permanent = True
                 return redirect(url_for('auth.wardrobe'))
             else:
-                return render_template('login.html', error="Invalid credentials. Please try again.")
+                error = "Invalid credentials. Please try again."
 
-    # Only show error if it was a POST and credentials were wrong
-    return render_template('login.html')  # <-- no error for GET request
+    return render_template('login.html', error=error)
+
 
 
 
@@ -103,6 +110,42 @@ def wardrobe():
         wardrobe_items = cursor.fetchall()
 
     return render_template('wardrobe.html', username=username, wardrobe_items=wardrobe_items)
+
+@auth.route('/delete_item/<int:item_id>', methods=['POST'])
+def delete_item(item_id):
+    username = session.get('username')
+    if not username:
+        return redirect(url_for('auth.login'))
+
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM wardrobe WHERE id=? AND username=?", (item_id, username))
+        conn.commit()
+
+    return redirect(url_for('auth.wardrobe'))
+
+@auth.route('/edit_item/<int:item_id>', methods=['GET', 'POST'])
+def edit_item(item_id):
+    username = session.get('username')
+    if not username:
+        return redirect(url_for('auth.login'))
+
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        
+        if request.method == 'POST':
+            new_name = request.form['item_name']
+            cursor.execute("UPDATE wardrobe SET item_name=? WHERE id=? AND username=?", (new_name, item_id, username))
+            conn.commit()
+            return redirect(url_for('auth.wardrobe'))
+
+        cursor.execute("SELECT * FROM wardrobe WHERE id=? AND username=?", (item_id, username))
+        item = cursor.fetchone()
+        if not item:
+            return "Item not found or unauthorized."
+
+    return render_template('edit_item.html', item=item)
+
 
 # Add Item route
 @auth.route('/add_item', methods=['POST'])
