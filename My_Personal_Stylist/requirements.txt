@@ -1,7 +1,8 @@
 flask
 requests
 pillow
-tensorflow\nkeras
+tensorflow
+keras
 flask
 tensorflow
 sqlite3
