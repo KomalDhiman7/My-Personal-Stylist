@@ -7,18 +7,43 @@ from weather_api import get_weather
 from image_analysis import analyze_outfit
 from PIL import Image
 from datetime import timedelta
+from werkzeug.utils import secure_filename
 
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 
 # ---------------------- Flask Config ----------------------
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'your_secret_key_here'
 app.config['UPLOAD_FOLDER'] = 'static/images/uploads'
 app.permanent_session_lifetime = timedelta(days=30)
 
+UPLOAD_FOLDER = './uploads'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        file = request.files.get('image')
+        if file:
+            # Save the file in the uploads folder
+            file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+            file.save(file_path)
+            uploaded_image = file_path  # Or process as required
+            return render_template('upload.html', uploaded_image=uploaded_image)
+        else:
+            return "No file selected", 400
+    return render_template('upload.html')
 
 # Register Blueprints
 app.register_blueprint(auth, url_prefix='/auth')
@@ -69,9 +94,49 @@ def suggest_outfit(temp, description):
     else:
         return "Light and breathable fabrics are best. Try shorts and a sleeveless top."
 
-# ---------------------- Home Route (Weather + Outfit) ----------------------
-@app.route('/', methods=['GET', 'POST'])
-def home():
+# ---------------------- Home Route (Homepage with Navbar) ----------------------
+@app.route('/')
+def homepage():
+    return render_template('home.html')
+
+
+
+@app.route('/profile')
+def profile():
+    # Example: Assuming the profile page needs user info from session
+    if 'username' in session:
+        username = session['username']
+        return render_template('profile.html', username=username)
+    else:
+        return redirect(url_for('auth.login'))  # Redirect to login if not logged in
+
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    if request.method == 'POST':
+        # Update username and email
+        session['username'] = request.form['username']
+        session['email'] = request.form['email']
+        
+        # Handle profile picture upload
+        if 'profile_pic' in request.files:
+            file = request.files['profile_pic']
+            if file and allowed_file(file.filename):
+                # Secure the filename to avoid security risks
+                filename = os.path.join(UPLOAD_FOLDER, file.filename)
+                file.save(filename)
+                session['profile_pic'] = filename  # Store the file path in session
+
+        return redirect(url_for('profile'))
+
+    return render_template('edit_profile.html')
+
+
+
+
+# ---------------------- Suggestion Route (Weather + Outfit) ----------------------
+@app.route('/suggestions', methods=['GET', 'POST'])
+def suggestions():
     weather_info, outfit_suggestion, uploaded_image, today_outfit = None, None, None, None
     username = session.get('username')
 
@@ -101,8 +166,6 @@ def home():
                            outfit_suggestion=outfit_suggestion,
                            uploaded_image=uploaded_image,
                            today_outfit=today_outfit)
-
-
 
 # ---------------------- Start App ----------------------
 if __name__ == '__main__':

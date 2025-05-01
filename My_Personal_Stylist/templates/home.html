@@ -1,0 +1,52 @@
+<!-- home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Personal Stylist</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #fceabb, #f8b500);
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      padding: 100px 20px;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+    }
+    .btn {
+      background-color: #333;
+      color: white;
+      padding: 12px 25px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  {% include 'navbar.html' %}
+
+  <div class="container">
+    <h1>Welcome to My Personal Stylist 👗</h1>
+    <p>Your AI-powered fashion assistant — Style smarter, feel better.</p>
+    <a href="/upload" class="btn">Get Started</a>
+  </div>
+
+</body>
+</html>
